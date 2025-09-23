@@ -1,0 +1,79 @@
+openapi: 3.0.3
+info:
+  title: Canvas API (Subset for Users and Courses)
+  version: "1.0.0"
+  description: |
+    Minimal OpenAPI spec for Canvas endpoints used via Trino OpenAPI connector.
+    Includes GET /users/self and GET /courses.
+servers:
+  - url: https://canvas.instructure.com/api/v1
+externalDocs:
+  url: https://canvas.instructure.com/doc/api//users.json
+security: []
+paths:
+  /users/self:
+    get:
+      summary: Get current user
+      operationId: getCurrentUser
+      responses:
+        "200":
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /courses:
+    get:
+      summary: List courses for current user
+      operationId: listCourses
+      responses:
+        "200":
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        short_name:
+          type: string
+        sortable_name:
+          type: string
+        login_id:
+          type: string
+        email:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        course_code:
+          type: string
+        workflow_state:
+          type: string
+        start_at:
+          type: string
+          format: date-time
+        end_at:
+          type: string
+          format: date-time
