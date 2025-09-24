@@ -42,6 +42,7 @@ paths:
       operationId: list_users_in_course_search_users
       responses:
         "200":
+          description: No response was specified
           content:
             application/json:
               schema:
@@ -54,6 +55,7 @@ paths:
       operationId: list_courses_for_user
       responses:
         "200":
+          description: No response was specified
           content:
             application/json:
               schema:
