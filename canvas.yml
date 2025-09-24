@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Canvas API (Subset for Users and Courses)
-  version: 1.0.0
+  version: "1.0.0"
   description: |
     Minimal OpenAPI spec for Canvas endpoints used via Trino OpenAPI connector.
     Includes GET /users/self and GET /courses.
@@ -35,32 +35,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Course"
-  /courses/{course_id}/search_users:
-    get:
-      summary: List users in course
-      operationId: list_users_in_course_search_users
-      responses:
-        "200":
-          description: No response was specified
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
-  /users/{user_id}/courses:
-    get:
-      summary: List courses for a user
-      operationId: list_courses_for_user
-      responses:
-        "200":
-          description: No response was specified
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CourseWithIncludes"
 components:
   securitySchemes:
     bearerAuth:
@@ -103,29 +77,3 @@ components:
         end_at:
           type: string
           format: date-time
-    CourseWithIncludes:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        account_id:
-          type: integer
-        enrollments:
-          type: array
-          items:
-            $ref: "#/components/schemas/Enrollment"
-    Enrollment:
-      type: object
-      properties:
-        type:
-          type: string
-        role:
-          type: string
-        role_id:
-          type: integer
-        user_id:
-          type: integer
-        enrollment_state:
-          type: string
