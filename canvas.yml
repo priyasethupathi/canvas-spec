@@ -79,6 +79,10 @@ components:
         end_at:
           type: string
           format: date-time
+        enrollments:
+          items:
+            $ref: "#/components/schemas/Enrollment"
+          type: array
     User:
       type: object
       required:
@@ -164,4 +168,4 @@ components:
         type:
           type: string
         user_id:
-          type: integer      
+          type: integer
