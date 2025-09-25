@@ -35,7 +35,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Course"
- /courses/{course_id}/users:
+  /courses/{course_id}/users:
     get:
       summary: List users in course
       operationId: list_users_in_course_users
