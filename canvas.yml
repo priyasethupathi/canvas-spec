@@ -55,24 +55,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        short_name:
-          type: string
-        sortable_name:
-          type: string
-        login_id:
-          type: string
-        email:
-          type: string
-        created_at:
-          type: string
-          format: date-time
     Course:
       type: object
       properties:
