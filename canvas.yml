@@ -123,3 +123,45 @@ components:
           type: string
         time_zone:
           type: string
+    Enrollment:
+      type: object
+      properties:
+        associated_user_id:
+          type: integer
+        computed_current_grade:
+          type: string
+        computed_current_score:
+          type: number
+        computed_final_grade:
+          type: string
+        computed_final_score:
+          type: number
+        course_id:
+          type: integer
+        course_integration_id:
+          type: string
+        course_section_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        current_grading_period_id:
+          type: integer
+        current_grading_period_title:
+          type: string
+        current_period_computed_current_grade:
+          type: string
+        current_period_computed_current_score:
+          type: number
+        current_period_computed_final_grade:
+          type: string
+        current_period_computed_final_score:
+          type: number
+        total_activity_time:
+          type: integer
+        totals_for_all_grading_periods_option:
+          type: boolean
+        type:
+          type: string
+        user_id:
+          type: integer      
