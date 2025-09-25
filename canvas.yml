@@ -35,214 +35,19 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Course"
-  /v1/courses/{course_id}/users:
+ /courses/{course_id}/users:
     get:
-      deprecated: false
-      description:
-        Returns the paginated list of users in this course. And optionally
-        the user's enrollments in the course.
+      summary: List users in course
       operationId: list_users_in_course_users
-      parameters:
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-            minimum: 0
-          description:
-            The bookmark leading to the next paginated page. This needs to
-            be parsed from the response header ('Link' field).
-        - in: query
-          name: per_page
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 10
-          description: The numbers of items to return.
-        - description: ID
-          in: path
-          name: course_id
-          required: true
-          schema:
-            type: string
-        - description:
-            The partial name or full ID of the users to match and return
-            in the results list.
-          in: query
-          name: search_term
-          schema:
-            type: string
-        - description:
-            'When set, only return users where the user is enrolled as this
-            type.
-
-            "student_view" implies include[]=test_student.
-
-            This argument is ignored if enrollment_role is given.'
-          explode: false
-          in: query
-          name: enrollment_type[]
-          schema:
-            items:
-              type: string
-              enum:
-                - teacher
-                - student
-                - student_view
-                - ta
-                - observer
-                - designer
-            type: array
-          style: form
-        - description: "Deprecated
-
-            When set, only return users enrolled with the specified course-level role.  This
-            can be
-
-            a role created with the {api:RoleOverridesController#add_role Add Role API}
-            or a
-
-            base role type of 'StudentEnrollment', 'TeacherEnrollment', 'TaEnrollment',
-
-            'ObserverEnrollment', or 'DesignerEnrollment'."
-          in: query
-          name: enrollment_role
-          schema:
-            type: string
-        - description:
-            "When set, only return courses where the user is enrolled with
-            the specified
-
-            course-level role.  This can be a role created with the
-
-            {api:RoleOverridesController#add_role Add Role API} or a built_in role id
-            with type
-
-            'StudentEnrollment', 'TeacherEnrollment', 'TaEnrollment', 'ObserverEnrollment',
-
-            or 'DesignerEnrollment'."
-          in: query
-          name: enrollment_role_id
-          schema:
-            format: int64
-            type: integer
-        - description: '- "enrollments":
-
-            Optionally include with each Course the user''s current and invited
-
-            enrollments. If the user is enrolled as a student, and the account has
-
-            permission to manage or view all grades, each enrollment will include a
-
-            ''grades'' key with ''current_score'', ''final_score'', ''current_grade''
-            and
-
-            ''final_grade'' values.
-
-            - "locked": Optionally include whether an enrollment is locked.
-
-            - "avatar_url": Optionally include avatar_url.
-
-            - "bio": Optionally include each user''s bio.
-
-            - "test_student": Optionally include the course''s Test Student,
-
-            if present. Default is to not include Test Student.
-
-            - "custom_links": Optionally include plugin-supplied custom links for each
-            student,
-
-            such as analytics information
-
-            - "current_grading_period_scores": if enrollments is included as
-
-            well as this directive, the scores returned in the enrollment
-
-            will be for the current grading period if there is one. A
-
-            ''grading_period_id'' value will also be included with the
-
-            scores. if grading_period_id is nil there is no current grading
-
-            period and the score is a total score.'
-          explode: false
-          in: query
-          name: include[]
-          schema:
-            items:
-              type: string
-              enum:
-                - email
-                - enrollments
-                - locked
-                - avatar_url
-                - test_student
-                - bio
-                - custom_links
-                - current_grading_period_scores
-                - sections
-            type: array
-          style: form
-        - description:
-            "If this parameter is given and it corresponds to a user in the
-            course,
-
-            the +page+ parameter will be ignored and the page containing the specified
-            user
-
-            will be returned instead."
-          in: query
-          name: user_id
-          schema:
-            type: string
-        - description:
-            'If included, the course users set will only include users with
-            IDs
-
-            specified by the param. Note: this will not work in conjunction
-
-            with the "user_id" argument but multiple user_ids can be included.'
-          explode: false
-          in: query
-          name: user_ids[]
-          schema:
-            items:
-              type: integer
-            type: array
-          style: form
-        - description:
-            'When set, only return users where the enrollment workflow state
-            is of one of the given types.
-
-            "active" and "invited" enrollments are returned by default.'
-          explode: false
-          in: query
-          name: enrollment_state[]
-          schema:
-            items:
-              type: string
-              enum:
-                - active
-                - invited
-                - rejected
-                - completed
-                - inactive
-            type: array
-          style: form
       responses:
-        200:
+        "200":
+          description: List of users in the course
           content:
             application/json:
               schema:
+                type: array
                 items:
                   $ref: "#/components/schemas/User"
-                type: array
-          description: No response was specified
-      summary: List users in course
-      tags:
-        - courses
 components:
   securitySchemes:
     bearerAuth:
@@ -286,137 +91,46 @@ components:
           type: string
           format: date-time
     User:
-      description:
-        A Canvas user, e.g. a student, teacher, administrator, observer,
-        etc.
+      type: object
+      required:
+         - id
       properties:
         avatar_state:
-          description:
-            Optional If avatars are enabled and caller is admin, this field
-            can be requested and will contain the current state of the user's avatar.
-          example: approved
-          nullable: true
           type: string
         avatar_url:
-          description:
-            If avatars are enabled, this field will be included and contain
-            a url to retrieve the user's avatar.
-          example: https://en.gravatar.com/avatar/d8cb8c8cd40ddf0cd05241443a591868?s=80&r=g
-          nullable: true
           type: string
         bio:
-          description: "Optional: The user's bio."
-          example: I like the Muppets.
-          nullable: true
           type: string
         email:
-          description:
-            "Optional: This field can be requested with certain API calls,
-            and will return the users primary email address."
-          example: sheldon@caltech.example.com
-          nullable: true
           type: string
-        enrollments:
-          description:
-            "Optional: This field can be requested with certain API calls,
-            and will return a list of the users active enrollments. See the List enrollments
-            API for more details about the format of these records."
-          items:
-            $ref: "#/components/schemas/Enrollment"
-          nullable: true
-          type: array
         first_name:
-          description: The first name of the user.
-          nullable: true
           type: string
         id:
-          description: The ID of the user.
-          example: 2
-          format: int64
           type: integer
+          format: int64
         integration_id:
-          description:
-            The integration_id associated with the user.  This field is
-            only included if the user came from a SIS import and has permissions to
-            view SIS information.
-          example: ABC59802
-          nullable: true
           type: string
         last_login:
-          description:
-            "Optional: This field is only returned in certain API calls,
-            and will return a timestamp representing the last time the user logged
-            in to canvas."
-          example: 2012-05-30 17:45:25+00:00
-          format: date-time
-          nullable: true
           type: string
+          format: date-time
         last_name:
-          description: The last name of the user.
-          nullable: true
           type: string
         locale:
-          description:
-            "Optional: This field can be requested with certain API calls,
-            and will return the users locale in RFC 5646 format."
-          example: tlh
-          nullable: true
           type: string
         login_id:
-          description:
-            The unique login id for the user.  This is what the user uses
-            to log in to Canvas.
-          example: sheldon@caltech.example.com
-          nullable: true
           type: string
         name:
-          description: The name of the user.
-          example: Sheldon Cooper
-          nullable: true
           type: string
         short_name:
-          description:
-            A short name the user has selected, for use in conversations
-            or other less formal places through the site.
-          example: Shelly
-          nullable: true
           type: string
         sections:
-          description:
-            A list of the sections this user is part of in the courses
-            they are part of.
-          example: Section 1, Section 2, Section 2a
-          nullable: true
           type: string
         sis_import_id:
-          description:
-            The id of the SIS import.  This field is only included if the
-            user came from a SIS import and has permissions to manage SIS information.
-          example: 18
-          format: int64
-          nullable: true
           type: integer
+          format: int64
         sis_user_id:
-          description:
-            The SIS ID associated with the user.  This field is only included
-            if the user came from a SIS import and has permissions to view SIS information.
-          example: SHEL93921
-          nullable: true
           type: string
         sortable_name:
-          description:
-            The name of the user that is should be used for sorting groups
-            of users, such as in the gradebook.
-          example: Cooper, Sheldon
-          nullable: true
           type: string
         time_zone:
-          description:
-            "Optional: This field is only returned in certain API calls,
-            and will return the IANA time zone name of the user's preferred timezone."
-          example: America/Denver
-          nullable: true
           type: string
-      required:
-        - id
-      type: object
