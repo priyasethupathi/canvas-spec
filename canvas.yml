@@ -39,6 +39,13 @@ paths:
     get:
       summary: List users in course
       operationId: list_users_in_course_users
+      parameters:
+        - in: path # Defines the parameter location
+          name: course_id # The name must match the placeholder in the path
+          required: true # Path parameters are always required
+          schema:
+            type: integer # Specify the data type
+          description: The unique numeric ID of the course
       responses:
         "200":
           description: List of users in the course
